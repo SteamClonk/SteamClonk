@@ -127,23 +127,10 @@ void CStdEvent::Set()
 
 void CStdEvent::Reset()
 {
-	fd_set set;
-	FD_ZERO(&set);
-	FD_SET(fd[0], &set);
-
-	timeval timeout{0, 0};
-
-	switch (select(1, &set, nullptr, nullptr, &timeout))
+	char c;
+	while (read(fd[0], &c, 1) == -1)
 	{
-	case -1:
-		ThrowError("Reset failed");
-
-	case 0:
-		return;
-
-	default:
-		Read();
-		break;
+		ThrowIfFailed(errno != EINTR, "read failed");
 	}
 }
 
@@ -166,19 +153,10 @@ bool CStdEvent::WaitFor(const std::uint32_t milliseconds)
 	default:
 		if (!manualReset)
 		{
-			Read();
+			Reset();
 		}
 
 		return true;
-	}
-}
-
-void CStdEvent::Read()
-{
-	char c;
-	while (read(fd[0], &c, 1) != 1)
-	{
-		ThrowIfFailed(errno != EINTR, "read failed");
 	}
 }
 
