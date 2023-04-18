@@ -9,8 +9,10 @@
 //
 // Generated from the TEXTINCLUDE 2 resource.
 //
-#include "afxres.h"
-
+#include <windows.h>
+#ifndef IDC_STATIC
+#define IDC_STATIC				-1
+#endif
 /////////////////////////////////////////////////////////////////////////////
 #undef APSTUDIO_READONLY_SYMBOLS
 
@@ -99,7 +101,7 @@ BEGIN
             VALUE "SpecialBuild", C4BUILDOPT "\0"
             VALUE "ProductVersion", C4VERSION "\0"
             VALUE "InternalName", "LegacyClonk\0"
-            VALUE "LegalCopyright", "Copyright © 2017-2020 LegacyClonk Team"
+            VALUE "LegalCopyright", "Copyright ï¿½ 2017-2020 LegacyClonk Team"
             VALUE "LegalTrademarks", "Clonk is a registered trademark of Matthes Bender.\0"
             VALUE "OriginalFilename", "clonk.exe\0"
             VALUE "PrivateBuild", "\0"
