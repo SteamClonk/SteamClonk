@@ -98,13 +98,11 @@ jobs:
           ${{ github.workspace }}/build/c4group planet/System.c4g -p
       - name: "Windows: Download latest content"
         if: ${{ matrix.env == 'Windows' }}
-        id: download
         run: |
           gh run download -R SteamClonk/content -n "sc-content" --dir latest_content
         shell: cmd
       - name: "Linux/Mac: Download latest content"
         if: ${{ matrix.env != 'Windows' }}
-        id: download
         run: |
           gh run download -R SteamClonk/content -n "sc-content" --dir latest_content
       - name: Copy Content
