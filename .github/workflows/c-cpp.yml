@@ -95,13 +95,21 @@ jobs:
       - name: "Windows: Build c4gs"
         if: ${{ matrix.env == 'Windows' }}
         run: |
-          $(pwd)/build/RelWithDebInfo/c4group planet/Graphics.c4g -p
-          $(pwd)/build/RelWithDebInfo/c4group planet/System.c4g -p
+          cp -r planet/Graphics.c4g .
+          cp -r planet/System.c4g .
+          $(pwd)/build/RelWithDebInfo/c4group Graphics.c4g -p
+          $(pwd)/build/RelWithDebInfo/c4group System.c4g -p
+          cp Graphics.c4g output/.
+          cp System.c4g output/.
       - name: "Linux/Mac: Build c4gs"
         if: ${{ matrix.env != 'Windows' }}
         run: |
-          $(pwd)/build/c4group planet/Graphics.c4g -p
-          $(pwd)/build/c4group planet/System.c4g -p
+          cp -r planet/Graphics.c4g .
+          cp -r planet/System.c4g .
+          $(pwd)/build/c4group Graphics.c4g -p
+          $(pwd)/build/c4group System.c4g -p
+          cp Graphics.c4g output/.
+          cp System.c4g output/.
       - name: "Windows: Download latest content"
         if: ${{ matrix.env == 'Windows' }}
         run: |
