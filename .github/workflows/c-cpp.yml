@@ -93,11 +93,23 @@ jobs:
           $CHROOT cmake --build build $CMAKE_BUILD_ARGS
 
       - name: "Build c4gs"
-        if: ${{ matrix.env == 'Linux' }}
         run: |
-          C4GROUP=$PWD/build/c4group tools/make_Graphics.c4g.sh
-          C4GROUP=$PWD/build/c4group tools/make_System.c4g.sh
-
+          ${{ github.workspace }}/build/c4group planet/Graphics.c4g -p
+          ${{ github.workspace }}/build/c4group planet/System.c4g -p
+      - name: "Windows: Download latest content"
+        if: ${{ matrix.env == 'Windows' }}
+        id: download
+        run: |
+          gh run download -R SteamClonk/content -n "sc-content" --dir latest_content
+        shell: cmd
+      - name: "Linux/Mac: Download latest content"
+        if: ${{ matrix.env != 'Windows' }}
+        id: download
+        run: |
+          gh run download -R SteamClonk/content -n "sc-content" --dir latest_content
+      - name: Copy Content
+        run: |
+          cp latest_content/* output/.
       - name: "Windows: Collect binaries"
         if: ${{ matrix.env == 'Windows' }}
         run: |
