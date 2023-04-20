@@ -107,10 +107,14 @@ jobs:
         run: |
           gh run download -R SteamClonk/content -n "sc-content" --dir latest_content
         shell: cmd
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: "Linux/Mac: Download latest content"
         if: ${{ matrix.env != 'Windows' }}
         run: |
           gh run download -R SteamClonk/content -n "sc-content" --dir latest_content
+        env:
+          GH_TOKEN: ${{ github.token }}
       - name: Copy Content
         run: |
           cp latest_content/* output/.
