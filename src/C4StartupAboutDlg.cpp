@@ -143,6 +143,11 @@ web =
 	{"Lukas Werling", "Luchs"},
 	{"Florian Graier", "Nachtfalter"},
 	{"Benedict Etzel", "B_E"}
+},
+steam =
+{
+	{"Valentin Winkelmann", "vwgamedev"},
+	{"Maximilian Gerhardt", "max.gerhardt"}
 };
 
 template<int32_t left, int32_t top, int32_t right, int32_t bottom>
@@ -280,13 +285,14 @@ C4StartupAboutDlg::C4StartupAboutDlg() : C4StartupDlg(LoadResStr("IDS_DLG_ABOUT"
 	DrawPersonList(page1, code, "Engine and Tools", caDevelopersCol1.GetAll());
 
 	C4GUI::ComponentAligner caDevelopersCol2(caDevelopers.GetFromLeft(caMain.GetWidth()*1/3), 0,0, false);
-	DrawPersonList(page1, scripting, "Scripting", caDevelopersCol2.GetFromTop(caDevelopersCol2.GetHeight()*2/3));
+	DrawPersonList(page1, scripting, "Scripting", caDevelopersCol2.GetFromTop(caDevelopersCol2.GetHeight()*5/10));
 	DrawPersonList(page1, additionalArt, "Additional Art", caDevelopersCol2.GetAll());
 
 	C4GUI::ComponentAligner caDevelopersCol3(caDevelopers.GetFromLeft(caMain.GetWidth()*1/3), 0,0, false);
-	DrawPersonList(page1, music, "Music", caDevelopersCol3.GetFromTop(caDevelopersCol3.GetHeight()*1/3));
-	DrawPersonList(page1, voice, "Voice", caDevelopersCol3.GetFromTop(caDevelopersCol3.GetHeight()*3/10));
-	DrawPersonList(page1, web, "Web", caDevelopersCol3.GetAll());
+	DrawPersonList(page1, music, "Music", caDevelopersCol3.GetFromTop(caDevelopersCol3.GetHeight()*3/10));
+	DrawPersonList(page1, voice, "Voice", caDevelopersCol3.GetFromTop(caDevelopersCol3.GetHeight()*2/10));
+	DrawPersonList(page1, web, "Web", caDevelopersCol3.GetFromTop(caDevelopersCol3.GetHeight()*7/10));
+	DrawPersonList(page1, steam, "Steam Integration", caDevelopersCol3.GetAll());
 
 	aboutPages.emplace_back(std::move(page1));
 

@@ -18,10 +18,10 @@
 
 #define C4ENGINENAME "LegacyClonk"
 
-#define FANPROJECTTEXT "LegacyClonk is a fan project based on Clonk Rage."
+#define FANPROJECTTEXT "SteamClonk is a Steam port of the classic Clonk Rage and builds on Legacy Clonk."
 #define TRADEMARKTEXT "'Clonk' is a registered trademark of Matthes Bender."
 
-#define C4ENGINECAPTION "LegacyClonk"
+#define C4ENGINECAPTION "SteamClonk"
 #define C4EDITORCAPTION "Clonk Editor"
 
 /* These values are now controlled by the file source/version - DO NOT MODIFY DIRECTLY */

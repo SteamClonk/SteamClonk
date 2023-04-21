@@ -441,9 +441,9 @@ target_link_libraries(standard ZLIB::ZLIB)
 target_compile_definitions(standard PUBLIC
 	C4_OS="${C4_OS}"
 	ICONV_CONST=
-	STD_APPUSERMODELID="LegacyClonkTeam.LegacyClonk"
+	STD_APPUSERMODELID="SteamClonkTeam.SteamClonk"
 	# A standard product name for this project which is used in window registration etc.
-	STD_PRODUCT="LegacyClonk"
+	STD_PRODUCT="SteamClonk"
 	ZLIB_CONST=1
 )
 

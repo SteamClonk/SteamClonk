@@ -101,13 +101,13 @@ BEGIN
             VALUE "SpecialBuild", C4BUILDOPT "\0"
             VALUE "ProductVersion", C4VERSION "\0"
             VALUE "InternalName", "LegacyClonk\0"
-            VALUE "LegalCopyright", "Copyright � 2017-2020 LegacyClonk Team"
+            VALUE "LegalCopyright", "Copyright � 2017-2023 SteamClonk and LegacyClonk Team"
             VALUE "LegalTrademarks", "Clonk is a registered trademark of Matthes Bender.\0"
             VALUE "OriginalFilename", "clonk.exe\0"
             VALUE "PrivateBuild", "\0"
-            VALUE "ProductName", "LegacyClonk\0"
+            VALUE "ProductName", "SteamClonk\0"
             VALUE "Comments", "\0"
-            VALUE "CompanyName", "LegacyClonk Team\0"
+            VALUE "CompanyName", "SteamClonk Team\0"
         END
     END
     BLOCK "VarFileInfo"
