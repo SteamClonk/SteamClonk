@@ -142,13 +142,13 @@ jobs:
         if: ${{ matrix.env == 'Windows' }}
         run: |
           cd build
-          mv RelWithDebInfo/*.{exe,pdb} ../output
+          mv RelWithDebInfo/*.{exe,pdb,dll,txt} ../output
 
       - name: "Linux: Collect binaries"
         if: ${{ matrix.env == 'Linux' }}
         run: |
           cd build
-          cp clonk c4group ../output
+          cp clonk c4group *.so *.txt ../output
 
       - name: "Mac: Create Bundle"
         if: ${{ matrix.env == 'Mac' }}
