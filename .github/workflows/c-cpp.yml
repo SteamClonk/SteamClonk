@@ -54,7 +54,8 @@ jobs:
         run: |
           pwd
           ls -l
-          7z x  ${{ github.workspace }}/sc_deps/steamworks_sdk_156.zip sdk -o ${{ github.workspace }}/steamsdk
+          ls sc_deps || true
+          7z x  sc_deps/steamworks_sdk_156.zip sdk -osteamsdk
       - name: "Setup Directories"
         run: mkdir output
 
