@@ -54,8 +54,9 @@ jobs:
         run: |
           pwd
           ls -l
-          ls sc_deps || true
-          7z x  sc_deps/steamworks_sdk_156.zip sdk -osteamsdk
+          ls -l sc_deps || true
+          7z x  sc_deps/steamworks_sdk_156.zip
+          mv sdk steamsdk
       - name: "Setup Directories"
         run: mkdir output
 
