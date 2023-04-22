@@ -44,7 +44,17 @@ jobs:
       - uses: actions/checkout@v3
         with:
           submodules: recursive
-
+      - name: "Checkout SteamSDK"
+        uses: actions/checkout@v3
+        with:
+          repository: SteamClonk/sc_deps
+          token: ${{ github.token }}
+          path: ${{ github.workspace }}
+      - name: Extract SteamSDK
+        run: |
+          pwd
+          ls -l
+          7z x sc_deps/steamworks_sdk_156.zip sdk -o ${{ github.workspace }}/steamsdk
       - name: "Setup Directories"
         run: mkdir output
 
