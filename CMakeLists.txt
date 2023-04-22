@@ -62,6 +62,7 @@ option(SOLIDMASK_DEBUG "Solid mask debugging" OFF)
 option(USE_CONSOLE "Dedicated server mode (compile as pure console application)" OFF)
 option(USE_PCH "Precompile Headers" ON)
 option(USE_STAT "Enable internal performance statistics for developers" OFF)
+option(USE_STEAM "Enable Steam specific functionality" ON)
 
 # ENABLE_SOUND
 CMAKE_DEPENDENT_OPTION(ENABLE_SOUND "Compile with sound support" ON
@@ -433,6 +434,81 @@ if (USE_X11)
 	target_link_libraries(clonk X11::X11 X11::Xpm X11::Xxf86vm)
 endif ()
 
+if(USE_STEAM)
+	if(NOT EXISTS "${CMAKE_SOURCE_DIR}/steamsdk/")
+		message("Downloading SteamSDK from source.")
+		include(FetchContent)
+		function(download_file url hash dl_name)
+		FetchContent_Declare(download_${dl_name}
+			URL ${url}
+			URL_HASH SHA256=${hash}
+			DOWNLOAD_NO_EXTRACT true
+			TLS_VERIFY true
+		)
+		FetchContent_Populate(download_${dl_name})
+		endfunction(download_file)
+		download_file(
+			https://partner.steamgames.com/downloads/steamworks_sdk.zip
+			e95edd097240a8898c74df51fdc61aa6b70f5cc690199a070e7e91e5c4dc3c77
+			steamsdk
+		  )
+		FetchContent_GetProperties(download_steamsdk SOURCE_DIR STEAMSDKDOWNLOAD)
+		file(ARCHIVE_EXTRACT INPUT "${STEAMSDKDOWNLOAD}/steamworks_sdk.zip" DESTINATION "${CMAKE_SOURCE_DIR}/steamsdk_tmp")
+		file(RENAME "${CMAKE_SOURCE_DIR}/steamsdk_tmp/sdk" "${CMAKE_SOURCE_DIR}/steamsdk")
+		file(REMOVE_RECURSE  "${CMAKE_SOURCE_DIR}/steamsdk_tmp")
+	endif()
+	set(STEAMSDK_IMPL "") # fallback
+	set(STEAMTICKET_IMPL "") # fallback
+	if (APPLE)
+		set(STEAMSDK_FILE "osx/libsteam_api.dylib")
+		set(STEAMTICKET_FILE "osx/libsdkencryptedappticket.dylib")
+	elseif (UNIX AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+		set(STEAMSDK_FILE "linux32/libsteam_api.so")
+		set(STEAMTICKET_FILE "linux32/libsdkencryptedappticket.so")
+	elseif (UNIX AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(STEAMSDK_FILE "linux64/libsteam_api.so")
+		set(STEAMTICKET_FILE "linux64/libsdkencryptedappticket.so")
+	elseif (WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 4)
+		set(STEAMSDK_FILE "../steam_api.dll")
+		set(STEAMSDK_IMPL "${CMAKE_SOURCE_DIR}/steamsdk/redistributable_bin/steam_api.lib")
+		set(STEAMTICKET_FILE "win32/sdkencryptedappticket.dll")
+		set(STEAMTICKET_IMPL "${CMAKE_SOURCE_DIR}/steamsdk/public/steam/lib/win32/sdkencryptedappticket.lib")
+	elseif (WIN32 AND CMAKE_SIZEOF_VOID_P EQUAL 8)
+		set(STEAMSDK_FILE "win64/steam_api64.dll")
+		set(STEAMSDK_IMPL "${CMAKE_SOURCE_DIR}/steamsdk/redistributable_bin/win64/steam_api64.lib")
+		set(STEAMTICKET_FILE "win64/sdkencryptedappticket64.dll")
+		set(STEAMTICKET_IMPL "${CMAKE_SOURCE_DIR}/steamsdk/public/steam/lib/win64/sdkencryptedappticket64.lib")
+	endif()
+
+	add_library(steamsdk SHARED IMPORTED) # or STATIC instead of SHARED
+	set_target_properties(steamsdk PROPERTIES
+	  IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/steamsdk/redistributable_bin/${STEAMSDK_FILE}"
+	  IMPORTED_IMPLIB "${STEAMSDK_IMPL}"
+	  INTERFACE_INCLUDE_DIRECTORIES "${CMAKE_SOURCE_DIR}/steamsdk/public/steam/"
+	)
+	add_library(steamsdk_ticket SHARED IMPORTED) # or STATIC instead of SHARED
+	set_target_properties(steamsdk_ticket PROPERTIES
+	  IMPORTED_LOCATION "${CMAKE_SOURCE_DIR}/steamsdk/public/steam/lib/${STEAMTICKET_FILE}"
+	  IMPORTED_IMPLIB "${STEAMTICKET_IMPL}"
+	)
+	target_link_libraries(clonk steamsdk steamsdk_ticket)
+	# steam_api(64).dll copy
+	add_custom_command ( TARGET clonk POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:steamsdk> $<TARGET_FILE_DIR:clonk>
+	)
+	# sdkcencryptedappticket(64).dll copy
+	add_custom_command ( TARGET clonk POST_BUILD
+		COMMAND ${CMAKE_COMMAND} -E copy_if_different
+		$<TARGET_FILE:steamsdk_ticket> $<TARGET_FILE_DIR:clonk>
+	)
+	# steam_appid.txt copy (temporary from reference game!)
+	add_custom_command( TARGET clonk POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy
+        ${CMAKE_SOURCE_DIR}/steamsdk/steamworksexample/release/steam_appid.txt
+        $<TARGET_FILE_DIR:clonk>)
+endif()
+
 # Link zlib
 find_package(ZLIB REQUIRED)
 target_link_libraries(standard ZLIB::ZLIB)
@@ -463,6 +539,7 @@ foreach(MACRO_VAR
 	USE_X11
 	WITH_DEVELOPER_MODE
 	WITH_GLIB
+	USE_STEAM
 )
 	if (${MACRO_VAR})
 		target_compile_definitions(standard PUBLIC ${MACRO_VAR}=1)

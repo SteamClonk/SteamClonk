@@ -31,6 +31,9 @@
 #include <C4Game.h>
 #include <C4Log.h>
 #include <C4Language.h>
+#if USE_STEAM
+#include <steam_api.h>
+#endif
 
 C4StartupMainDlg::C4StartupMainDlg() : C4StartupDlg(nullptr) // create w/o title; it is drawn in custom draw proc
 {
@@ -70,6 +73,13 @@ C4StartupMainDlg::C4StartupMainDlg() : C4StartupDlg(nullptr) // create w/o title
 	AddElement(new C4GUI::Label(FANPROJECTTEXT "   " TRADEMARKTEXT,
 		GetClientRect().Wdt, GetClientRect().Hgt - trademarkFont.GetLineHeight() / 2, ARight, 0xffffffff, &trademarkFont));
 
+#if USE_STEAM
+	char steamText[128] = {0};
+	const char* steamUserName = SteamFriends()->GetPersonaName();
+	snprintf(steamText, sizeof(steamText) - 1, "Steam Spieler: %s", steamUserName);
+	AddElement(new C4GUI::Label(steamText,
+		GetClientRect().Wdt, GetClientRect().Hgt - trademarkFont.GetLineHeight() - C4GUI::GetRes()->TitleFont.GetLineHeight(), ARight, 0xffffffff,  &C4GUI::GetRes()->TitleFont));
+#endif
 	// player selection shortcut - to be made optional
 	UpdateParticipants();
 	pParticipantsLbl->SetContextHandler(new C4GUI::CBContextHandler<C4StartupMainDlg>(this, &C4StartupMainDlg::OnPlayerSelContext));

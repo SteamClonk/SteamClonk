@@ -28,6 +28,10 @@
 #include <gtk/gtkmessagedialog.h>
 #endif
 
+#ifdef USE_STEAM
+#include <steam_api.h>
+#endif
+
 // debug memory management
 #if !defined(NODEBUGMEM) && defined(_MSC_VER)
 #include <crtdbg.h>
@@ -121,6 +125,14 @@ int ClonkMain(const HINSTANCE instance, const int cmdShow, const int argc, char 
 		MessageBox(nullptr, e.what(), STD_PRODUCT, MB_ICONERROR);
 		return C4XRV_Failure;
 	}
+#if USE_STEAM
+	if(SteamAPI_Init()) {
+		MessageBox(nullptr, "Steam SDK initialized OK", STD_PRODUCT, MB_ICONINFORMATION);
+	} else {
+		MessageBox(nullptr, "Steam SDK initialized not OK", STD_PRODUCT, MB_ICONERROR);
+		return C4XRV_Failure;
+	}
+#endif
 
 	// Run it
 	Application.Run();
@@ -283,7 +295,14 @@ int main(int argc, char *argv[])
 #endif
 		return C4XRV_Failure;
 	}
-
+#if USE_STEAM
+	if(SteamAPI_Init()) {
+		MessageBox(nullptr, "Steam SDK initialized OK", STD_PRODUCT, MB_ICONINFORMATION);
+	} else {
+		MessageBox(nullptr, "Steam SDK initialized not OK", STD_PRODUCT, MB_ICONERROR);
+		return C4XRV_Failure;
+	}
+#endif
 	// Execute application
 	Application.Run();
 	// free app stuff
