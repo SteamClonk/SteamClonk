@@ -297,9 +297,9 @@ int main(int argc, char *argv[])
 	}
 #if USE_STEAM
 	if(SteamAPI_Init()) {
-		MessageBox(nullptr, "Steam SDK initialized OK", STD_PRODUCT, MB_ICONINFORMATION);
+		printf("Steam SDK initialized OK\n");
 	} else {
-		MessageBox(nullptr, "Steam SDK initialized not OK", STD_PRODUCT, MB_ICONERROR);
+		printf("Steam SDK initialized not OK\n");
 		return C4XRV_Failure;
 	}
 #endif
