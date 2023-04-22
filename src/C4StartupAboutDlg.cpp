@@ -146,8 +146,8 @@ web =
 },
 steam =
 {
+	{"Maximilian Gerhardt", "maxgerhardt"},
 	{"Valentin Winkelmann", "vwgamedev"},
-	{"Maximilian Gerhardt", "max.gerhardt"}
 };
 
 template<int32_t left, int32_t top, int32_t right, int32_t bottom>
@@ -292,7 +292,7 @@ C4StartupAboutDlg::C4StartupAboutDlg() : C4StartupDlg(LoadResStr("IDS_DLG_ABOUT"
 	DrawPersonList(page1, music, "Music", caDevelopersCol3.GetFromTop(caDevelopersCol3.GetHeight()*3/10));
 	DrawPersonList(page1, voice, "Voice", caDevelopersCol3.GetFromTop(caDevelopersCol3.GetHeight()*2/10));
 	DrawPersonList(page1, web, "Web", caDevelopersCol3.GetFromTop(caDevelopersCol3.GetHeight()*7/10));
-	DrawPersonList(page1, steam, "Steam Integration", caDevelopersCol3.GetAll());
+	DrawPersonList(page1, steam, "Steam Portierung", caDevelopersCol3.GetAll());
 
 	aboutPages.emplace_back(std::move(page1));
 
