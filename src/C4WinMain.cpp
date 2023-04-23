@@ -74,6 +74,8 @@ int ClonkMain(const HINSTANCE instance, const int cmdShow, const int argc, char 
 
 	InstallCrashHandler();
 
+#ifndef USE_CONSOLE
+#ifdef NDEBUG
 	const std::span args{argv, static_cast<std::size_t>(argc)};
 
 	const auto hasArgument = [&args](const std::string_view argument)
@@ -81,8 +83,6 @@ int ClonkMain(const HINSTANCE instance, const int cmdShow, const int argc, char 
 		return std::ranges::find(args, argument) != std::ranges::end(args);
 	};
 
-#ifndef USE_CONSOLE
-#ifndef NDEBUG
 	if (hasArgument("/allocconsole"))
 #endif
 	{
